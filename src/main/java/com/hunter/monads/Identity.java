@@ -17,7 +17,7 @@ public class Identity<A> implements Monad<A> {
 
     @Override
     public <B, C> Monad<C> liftA2(Monad<B> b, BiFunction<A, B, Monad<C>> biFunction) {
-        return b.flatmap(bVal -> biFunction.apply(value, bVal));
+        return flatmap(value -> b.flatmap(bVal -> biFunction.apply(value, bVal)));
     }
 
     @Override

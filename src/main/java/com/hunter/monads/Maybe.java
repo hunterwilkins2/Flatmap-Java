@@ -24,7 +24,7 @@ public class Maybe<A> implements Monad<A> {
 
     @Override
     public <B, C> Monad<C> liftA2(Monad<B> b, BiFunction<A, B, Monad<C>> biFunction) {
-        return value != null ? b.flatmap(bVal -> biFunction.apply(value, bVal)) : Maybe.Nothing();
+        return flatmap(value -> b.flatmap(bVal -> biFunction.apply(value, bVal)));
     }
 
     @Override

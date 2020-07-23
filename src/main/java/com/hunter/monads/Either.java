@@ -31,7 +31,7 @@ public class Either<A, B> implements Monad<B> {
 
     @Override
     public <C, D> Monad<D> liftA2(Monad<C> c, BiFunction<B, C, Monad<D>> biFunction) {
-        return isLeft() ? Either.Left(left) : c.flatmap(bVal -> biFunction.apply(right, bVal));
+        return flatmap(right -> c.flatmap(bVal -> biFunction.apply(right, bVal)));
     }
 
     @Override

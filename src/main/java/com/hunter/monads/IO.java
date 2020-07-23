@@ -41,7 +41,7 @@ public class IO<A> implements Monad<A> {
 
     @Override
     public <B, C> Monad<C> liftA2(Monad<B> b, BiFunction<A, B, Monad<C>> biFunction) {
-        return b.flatmap(bVal -> biFunction.apply(effect.run(), bVal));
+        return flatmap(aVal -> b.flatmap(bVal -> biFunction.apply(aVal, bVal)));
     }
 
     @Override
