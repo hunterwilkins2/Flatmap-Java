@@ -3,6 +3,7 @@ package src.main.java.com.hunter.monads;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+
 public class Maybe<A> implements Monad<A> {
     private final A value;
 
@@ -23,7 +24,7 @@ public class Maybe<A> implements Monad<A> {
 
     @Override
     public <B, C> Monad<C> liftA2(Monad<B> b, BiFunction<A, B, Monad<C>> biFunction) {
-        return b.flatmap(bVal -> biFunction.apply(value, bVal));
+        return value != null ? b.flatmap(bVal -> biFunction.apply(value, bVal)) : Maybe.Nothing();
     }
 
     @Override
