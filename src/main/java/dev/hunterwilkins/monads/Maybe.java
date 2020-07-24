@@ -16,6 +16,14 @@ public class Maybe<A> {
         return new Maybe<>(null);
     }
 
+    public boolean hasValue() {
+        return value != null;
+    }
+
+    public A get() {
+        return value;
+    }
+
     public <B> Maybe<B> map(Function<A, B> f) {
         return flatmap(val -> Maybe.Just(f.apply(val)));
     }
