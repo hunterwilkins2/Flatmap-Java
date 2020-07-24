@@ -1,6 +1,20 @@
 <!-- omit in toc -->
 # Java Monad Library
-A library for exploring monads in Java.
+A library for exploring monads in Java. 
+
+I have added a Rock, Paper, Scissors game as a test class to demonstrate the Maybe and IO monads in action.
+
+To compile:
+```bash
+make -C ./src/main/java compile
+```
+To run:
+```bash
+make -C ./src/main/java run
+```
+
+<!-- omit in toc -->
+## Table of contents
 - [Monads](#monads)
   - [Either](#either)
   - [Identity](#identity)
