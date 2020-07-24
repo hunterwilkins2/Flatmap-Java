@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class Writer<A, B> implements Monad<B> {
+public class Writer<A, B> {
     private final List<A> logs;
     private final B value;
 
@@ -26,19 +26,16 @@ public class Writer<A, B> implements Monad<B> {
         return value;
     }
 
-    @Override
-    public <C> Monad<C> map(Function<B, C> f) {
+    public <C> Writer<A, C> map(Function<B, C> f) {
         return Writer.of(logs, f.apply(value));
     }
 
-    @Override
-    public <C, D> Monad<D> liftA2(Monad<C> c, BiFunction<B, C, Monad<D>> biFunction) {
+    public <C, D> Writer<A, D> liftA2(Writer<A, C> c, BiFunction<B, C, Writer<A, D>> biFunction) {
         return flatmap(bVal -> c.flatmap(cVal -> biFunction.apply(bVal, cVal)));
     }
 
-    @Override
-    public <C> Monad<C> flatmap(Function<B, Monad<C>> f) {
-        Writer<A, C> mappedWriter = (Writer<A, C>) f.apply(value);
+    public <C> Writer<A, C> flatmap(Function<B, Writer<A, C>> f) {
+        Writer<A, C> mappedWriter = f.apply(value);
         return Writer.of(FunctionalListHelper.append(logs, mappedWriter.getLogs()), mappedWriter.getValue());
     }
 

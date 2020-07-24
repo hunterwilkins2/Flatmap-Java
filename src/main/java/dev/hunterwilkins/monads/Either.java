@@ -3,7 +3,7 @@ package dev.hunterwilkins.monads;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class Either<A, B> implements Monad<B> {
+public class Either<A, B> {
     private final A left;
     private final B right;
 
@@ -24,18 +24,15 @@ public class Either<A, B> implements Monad<B> {
         return left != null;
     }
 
-    @Override
-    public <C> Monad<C> map(Function<B, C> f) {
+    public <C> Either<A, C> map(Function<B, C> f) {
         return flatmap(val -> Either.Right(f.apply(val)));
     }
 
-    @Override
-    public <C, D> Monad<D> liftA2(Monad<C> c, BiFunction<B, C, Monad<D>> biFunction) {
+    public <C, D> Either<A, D> liftA2(Either<A, C> c, BiFunction<B, C, Either<A, D>> biFunction) {
         return flatmap(right -> c.flatmap(bVal -> biFunction.apply(right, bVal)));
     }
 
-    @Override
-    public <C> Monad<C> flatmap(Function<B, Monad<C>> f) {
+    public <C> Either<A, C> flatmap(Function<B, Either<A, C>> f) {
         return isLeft() ? Either.Left(left) : f.apply(right);
     }
 

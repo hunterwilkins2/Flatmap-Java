@@ -3,7 +3,7 @@ package dev.hunterwilkins.monads;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class Reader<A, B> implements Monad<B> {
+public class Reader<A, B> {
     private final Function<A, B> runner;
 
     private Reader(Function<A, B> runner) { this.runner = runner; }
@@ -12,25 +12,26 @@ public class Reader<A, B> implements Monad<B> {
         return new Reader<>(runner);
     }
 
+    public static <A, B> Reader<A, B> pure(B b) {
+        return new Reader<>(env -> b);
+    }
+
     public B run(A env) {
         return runner.apply(env);
     }
 
-    @Override
-    public <C> Monad<C> map(Function<B, C> f) {
-        return Reader.of(env -> f.apply(run((A) env)));
+    public <C> Reader<A, C> map(Function<B, C> f) {
+        return Reader.of(env -> f.apply(run(env)));
     }
 
-    @Override
-    public <C, D> Monad<D> liftA2(Monad<C> c, BiFunction<B, C, Monad<D>> biFunction) {
+    public <C, D> Reader<A, D> liftA2(Reader<A, C> c, BiFunction<B, C, Reader<A, D>> biFunction) {
         return flatmap(bVal -> c.flatmap(cVal -> biFunction.apply(bVal, cVal)));
     }
 
-    @Override
-    public <C> Monad<C> flatmap(Function<B, Monad<C>> f) {
+    public <C> Reader<A, C> flatmap(Function<B, Reader<A, C>> f) {
         return Reader.of(env -> {
-            Reader<A, C> reader = (Reader<A, C>) f.apply(run((A) env));
-            return reader.run((A) env);
+            Reader<A, C> reader = f.apply(run(env));
+            return reader.run(env);
         });
     }
 

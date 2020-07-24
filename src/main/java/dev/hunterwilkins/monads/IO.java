@@ -4,7 +4,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class IO<A> implements Monad<A> {
+public class IO<A> {
     private final Effect<A> effect;
 
     private IO(Effect<A> effect) {
@@ -27,27 +27,24 @@ public class IO<A> implements Monad<A> {
         }
     }
 
-    public Monad<Void> mapToVoid(Consumer<A> f) {
+    public IO<Void> mapToVoid(Consumer<A> f) {
         return flatmap(result -> IO.apply(() -> {
             f.accept(result);
             return null;
         }));
     }
 
-    @Override
-    public <B> Monad<B> map(Function<A, B> f) {
-        return (Monad<B>) flatmap(result -> IO.apply(() -> f.apply(result)));
+    public <B> IO<B> map(Function<A, B> f) {
+        return flatmap(result -> IO.apply(() -> f.apply(result)));
     }
 
-    @Override
-    public <B, C> Monad<C> liftA2(Monad<B> b, BiFunction<A, B, Monad<C>> biFunction) {
+    public <B, C> IO<C> liftA2(IO<B> b, BiFunction<A, B, IO<C>> biFunction) {
         return flatmap(aVal -> b.flatmap(bVal -> biFunction.apply(aVal, bVal)));
     }
 
-    @Override
-    public <B> Monad<B> flatmap(Function<A, Monad<B>> f) {
-        return (Monad<B>) IO.apply(() -> {
-            IO<B> io = (IO<B>) f.apply(effect.run());
+    public <B> IO<B> flatmap(Function<A, IO<B>> f) {
+        return IO.apply(() -> {
+            IO<B> io = f.apply(effect.run());
             return io.runUnsafe();
         });
     }
