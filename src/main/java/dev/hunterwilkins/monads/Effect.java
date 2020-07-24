@@ -1,4 +1,4 @@
-package src.main.java.com.hunter.monads;
+package dev.hunterwilkins.monads;
 
 public interface Effect<T> {
    T run(); 

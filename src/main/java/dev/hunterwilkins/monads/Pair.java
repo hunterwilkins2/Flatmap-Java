@@ -1,4 +1,4 @@
-package src.main.java.com.hunter.monads;
+package dev.hunterwilkins.monads;
 
 public class Pair<A, B> {
     private final A item1;

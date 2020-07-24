@@ -1,4 +1,4 @@
-package src.main.java.com.hunter.monads;
+package dev.hunterwilkins.monads;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
