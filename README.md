@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# Java Monad Library
+# Flatmap Java
 A library for exploring monads in Java. 
 
 I have added a Rock, Paper, Scissors game as a test class to demonstrate the Maybe and IO monads in action.
